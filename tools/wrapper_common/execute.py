@@ -40,6 +40,10 @@ def _ensure_toolchain_path():
 
 _ensure_toolchain_path()
 
+# Expose this tool's hermetic interpreter so python-based SDK tool stubs
+# (e.g. xcstringstool) can run on executor images without a system python3.
+os.environ.setdefault("PYTHON3", sys.executable)
+
 # LINT.IfChange
 _DEFAULT_TIMEOUT = 900
 
