@@ -87,6 +87,7 @@ def _swift_dylib_action(
         output_dir,
         platform_name,
         platform_prerequisites,
+        sdk_tool_files,
         strip_bitcode,
         swift_stdlib_tool):
     """Registers a swift-stlib-tool action to gather Swift dylibs to bundle."""
@@ -111,14 +112,8 @@ def _swift_dylib_action(
         arguments = [swift_stdlib_tool_args],
         env = shared_environment.default_env,
         exec_group = mac_exec_group,
-        # The Linux cross toolchain's SDK tools are discovered through PATH.
-        # Run locally outside the sandbox so xcrun can reach them.
-        execution_requirements = {
-            "no-remote": "1",
-            "no-sandbox": "1",
-        },
         executable = swift_stdlib_tool,
-        inputs = binary_files,
+        inputs = binary_files + sdk_tool_files,
         mnemonic = "SwiftStdlibCopy",
         outputs = [output_dir],
         xcode_config = platform_prerequisites.xcode_version_config,
@@ -191,6 +186,7 @@ def _swift_dylibs_partial_impl(
                 output_dir = output_dir,
                 platform_name = platform_name,
                 platform_prerequisites = platform_prerequisites,
+                sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
                 strip_bitcode = True,
                 swift_stdlib_tool = apple_mac_toolchain_info.swift_stdlib_tool,
             )
@@ -214,6 +210,7 @@ def _swift_dylibs_partial_impl(
                     output_dir = swift_support_output_dir,
                     platform_name = platform_name,
                     platform_prerequisites = platform_prerequisites,
+                    sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
                     strip_bitcode = False,
                     swift_stdlib_tool = apple_mac_toolchain_info.swift_stdlib_tool,
                 )

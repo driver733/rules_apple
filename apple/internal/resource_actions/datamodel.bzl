@@ -36,7 +36,8 @@ def compile_datamodels(
         module_name,
         output_file,
         platform_prerequisites,
-        xctoolrunner):
+        xctoolrunner,
+        sdk_tool_files = []):
     """Creates an action that compiles datamodels.
 
     Args:
@@ -70,7 +71,7 @@ def compile_datamodels(
         env = shared_environment.default_env,
         exec_group = mac_exec_group,
         executable = xctoolrunner,
-        inputs = input_files,
+        inputs = input_files + sdk_tool_files,
         mnemonic = "MomCompile",
         outputs = [output_file],
         xcode_config = platform_prerequisites.xcode_version_config,
@@ -84,7 +85,8 @@ def compile_mappingmodel(
         mappingmodel_path,
         output_file,
         platform_prerequisites,
-        xctoolrunner):
+        xctoolrunner,
+        sdk_tool_files = []):
     """Creates an action that compiles CoreData mapping models.
 
     Args:
@@ -108,7 +110,7 @@ def compile_mappingmodel(
         env = shared_environment.default_env,
         exec_group = mac_exec_group,
         executable = xctoolrunner,
-        inputs = input_files,
+        inputs = input_files + sdk_tool_files,
         mnemonic = "MappingModelCompile",
         outputs = [output_file],
         xcode_config = platform_prerequisites.xcode_version_config,

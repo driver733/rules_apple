@@ -59,6 +59,7 @@ load(
 def _compile_datamodels(
         *,
         actions,
+        apple_mac_toolchain_info,
         mac_exec_group,
         datamodel_groups,
         label_name,
@@ -103,6 +104,7 @@ def _compile_datamodels(
             module_name = module_name,
             output_file = output_file,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
             xctoolrunner = xctoolrunner,
         )
         output_files.append(
@@ -114,6 +116,7 @@ def _compile_datamodels(
 def _compile_mappingmodels(
         *,
         actions,
+        apple_mac_toolchain_info,
         mac_exec_group,
         label_name,
         mappingmodel_groups,
@@ -143,6 +146,7 @@ def _compile_mappingmodels(
             mappingmodel_path = mappingmodel_path,
             output_file = output_file,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
             xctoolrunner = xctoolrunner,
         )
 
@@ -241,6 +245,7 @@ was declared. Skipping asset catalog compilation.
                 mac_exec_group = mac_exec_group,
                 output_file = png_file,
                 platform_prerequisites = platform_prerequisites,
+                sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
             )
             alternate_icons.append(png_file)
         else:
@@ -260,6 +265,7 @@ was declared. Skipping asset catalog compilation.
         primary_icon_name = primary_icon_name,
         product_type = product_type,
         rule_label = rule_label,
+        sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
         xctoolrunner = apple_mac_toolchain_info.xctoolrunner,
     )
 
@@ -335,6 +341,7 @@ def _datamodels(
         datamodels_processed_origins,
     ) = _compile_datamodels(
         actions = actions,
+        apple_mac_toolchain_info = apple_mac_toolchain_info,
         datamodel_groups = datamodel_groups,
         label_name = rule_label.name,
         mac_exec_group = mac_exec_group,
@@ -350,6 +357,7 @@ def _datamodels(
         mappingmodels_processed_origins,
     ) = _compile_mappingmodels(
         actions = actions,
+        apple_mac_toolchain_info = apple_mac_toolchain_info,
         label_name = rule_label.name,
         output_discriminator = output_discriminator,
         parent_dir = parent_dir,
@@ -441,6 +449,7 @@ def _infoplists(
 def _metals(
         *,
         actions,
+        apple_mac_toolchain_info,
         mac_exec_group,
         rule_label,
         parent_dir,
@@ -481,6 +490,7 @@ def _metals(
         mac_exec_group = mac_exec_group,
         output_file = metallib_file,
         platform_prerequisites = platform_prerequisites,
+        sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
     )
 
     return struct(
@@ -534,6 +544,7 @@ def _mlmodels(
             output_bundle = output_bundle,
             output_plist = output_plist,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
             xctoolrunner = apple_mac_toolchain_info.xctoolrunner,
         )
 
@@ -622,6 +633,7 @@ def _plists_and_strings(
 def _pngs(
         *,
         actions,
+        apple_mac_toolchain_info,
         mac_exec_group,
         files,
         output_discriminator,
@@ -664,6 +676,7 @@ def _pngs(
             mac_exec_group = mac_exec_group,
             output_file = png_file,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
         )
         png_files.append(png_file)
 
@@ -715,6 +728,7 @@ def _storyboards(
             mac_exec_group = mac_exec_group,
             output_dir = storyboardc_dir,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
             swift_module = swift_module,
             xctoolrunner = apple_mac_toolchain_info.xctoolrunner,
         )
@@ -733,6 +747,7 @@ def _storyboards(
         mac_exec_group = mac_exec_group,
         output_dir = linked_storyboard_dir,
         platform_prerequisites = platform_prerequisites,
+        sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
         storyboardc_dirs = compiled_storyboardcs,
         xctoolrunner = apple_mac_toolchain_info.xctoolrunner,
     )
@@ -748,6 +763,7 @@ def _storyboards(
 def _texture_atlases(
         *,
         actions,
+        apple_mac_toolchain_info,
         mac_exec_group,
         files,
         output_discriminator,
@@ -784,6 +800,7 @@ def _texture_atlases(
             mac_exec_group = mac_exec_group,
             output_dir = atlasc_dir,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
         )
         atlasc_files.append(atlasc_dir)
 
@@ -826,6 +843,7 @@ def _xibs(
             mac_exec_group = mac_exec_group,
             output_dir = out_dir,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
             swift_module = swift_module,
             xctoolrunner = apple_mac_toolchain_info.xctoolrunner,
         )
@@ -866,6 +884,7 @@ def _xcstrings(
             mac_exec_group = mac_exec_group,
             output_dir = out_dir,
             platform_prerequisites = platform_prerequisites,
+            sdk_tool_files = apple_mac_toolchain_info.sdk_tool_files,
             xctoolrunner = apple_mac_toolchain_info.xctoolrunner,
         )
         lproj_files.append(out_dir)

@@ -31,7 +31,8 @@ def compile_mlmodel(
         output_bundle,
         output_plist,
         platform_prerequisites,
-        xctoolrunner):
+        xctoolrunner,
+        sdk_tool_files = []):
     """Creates an action that compiles an mlmodel file into an mlmodelc bundle.
 
     Args:
@@ -60,7 +61,7 @@ def compile_mlmodel(
         arguments = [args],
         exec_group = mac_exec_group,
         executable = xctoolrunner,
-        inputs = [input_file],
+        inputs = [input_file] + sdk_tool_files,
         mnemonic = "MlmodelCompile",
         outputs = [output_bundle, output_plist],
         xcode_config = platform_prerequisites.xcode_version_config,

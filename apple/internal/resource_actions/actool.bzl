@@ -521,7 +521,8 @@ def compile_asset_catalog(
         primary_icon_name,
         product_type,
         rule_label,
-        xctoolrunner):
+        xctoolrunner,
+        sdk_tool_files = []):
     """Creates an action that compiles asset catalogs.
 
     This action populates a directory with compiled assets that must be merged
@@ -636,7 +637,7 @@ def compile_asset_catalog(
         exec_group = mac_exec_group,
         executable = xctoolrunner,
         execution_requirements = {"no-sandbox": "1"},
-        inputs = asset_files,
+        inputs = asset_files + sdk_tool_files,
         mnemonic = "AssetCatalogCompile",
         outputs = outputs,
         xcode_config = xcode_config,

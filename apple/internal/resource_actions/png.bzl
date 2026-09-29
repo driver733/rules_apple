@@ -23,7 +23,14 @@ load(
     "shared_environment",
 )
 
-def copy_png(*, actions, mac_exec_group, input_file, output_file, platform_prerequisites):
+def copy_png(
+        *,
+        actions,
+        mac_exec_group,
+        input_file,
+        output_file,
+        platform_prerequisites,
+        sdk_tool_files = []):
     """Creates an action that copies and compresses a png using copypng.
 
     Args:
@@ -64,7 +71,7 @@ def copy_png(*, actions, mac_exec_group, input_file, output_file, platform_prere
             env = shared_environment.default_env,
             exec_group = mac_exec_group,
             executable = "xcrun",
-            inputs = [input_file],
+            inputs = [input_file] + sdk_tool_files,
             mnemonic = "CopyPng",
             outputs = [output_file],
             xcode_config = platform_prerequisites.xcode_version_config,

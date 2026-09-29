@@ -33,6 +33,10 @@ A `File` referencing a plist template for dSYM bundles.
         "process_and_sign_template": """\
 A `File` referencing a template for a shell script to process and sign.
 """,
+        "sdk_tool_files": """\
+Apple SDK/toolchain files that actions resolving SDK tools through PATH need as
+declared inputs under sandboxed or remote execution.
+""",
         "alticonstool": """\
 The files_to_run for a tool to insert alternate icons entries in the app
 bundle's `Info.plist`.
@@ -126,6 +130,7 @@ def _apple_mac_tools_toolchain_impl(ctx):
     mac_tools_info = AppleMacToolsToolchainInfo(
         dsym_info_plist_template = ctx.file.dsym_info_plist_template,
         process_and_sign_template = ctx.file.process_and_sign_template,
+        sdk_tool_files = ctx.files._sdk_tool_files,
         alticonstool = ctx.attr.alticonstool.files_to_run,
         bundletool_experimental = ctx.attr.bundletool_experimental.files_to_run,
         codesigningtool = ctx.attr.codesigningtool.files_to_run,
@@ -149,6 +154,10 @@ def _apple_mac_tools_toolchain_impl(ctx):
 
 apple_mac_tools_toolchain = rule(
     attrs = {
+        "_sdk_tool_files": attr.label(
+            default = Label("//apple:sdk_tool_files"),
+            allow_files = True,
+        ),
         "alticonstool": attr.label(
             cfg = "exec",
             executable = True,

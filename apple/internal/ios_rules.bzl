@@ -2054,6 +2054,7 @@ def _ios_imessage_application_impl(ctx):
         actions = actions,
         platform_prerequisites = platform_prerequisites,
         rule_label = label,
+        sdk_tool_files = ctx.files._sdk_tool_files,
         xcode_stub_path = rule_descriptor.stub_binary_path,
     )
 
@@ -2549,6 +2550,7 @@ def _ios_sticker_pack_extension_impl(ctx):
         actions = actions,
         platform_prerequisites = platform_prerequisites,
         rule_label = label,
+        sdk_tool_files = ctx.files._sdk_tool_files,
         xcode_stub_path = rule_descriptor.stub_binary_path,
     )
 
