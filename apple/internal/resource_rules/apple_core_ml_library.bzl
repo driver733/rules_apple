@@ -194,4 +194,5 @@ as `#import my/package/MyModel.h`.
 This rule will also compile the `mlmodel` into an `mlmodelc` and propagate it
 upstream so that it is packaged as a resource inside the top level bundle.
 """,
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

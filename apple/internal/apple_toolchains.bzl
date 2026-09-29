@@ -266,6 +266,10 @@ APPLE_XPLAT_EXEC_GROUP = "_xplat_tool_group"
 APPLE_MAC_TOOLCHAIN_TYPE = "//apple/internal:mac_tools_toolchain_type"
 APPLE_MAC_EXEC_GROUP = "_mac_tool_group"
 
+# See rule_factory.bzl. Named through rules_applecross's apparent name, which
+# this fork declares a bazel_dep on.
+_APPLE_BUNDLING_TOOLCHAIN_TYPE = "@rules_applecross//toolchain:apple_bundling_toolchain_type"
+
 def _apple_xplat_tools_toolchain_impl(ctx):
     xplat_info = AppleXPlatToolsToolchainInfo(
         build_settings = struct(
@@ -343,8 +347,14 @@ def _use_apple_exec_group_toolchain():
             toolchains = [config_common.toolchain_type(APPLE_XPLAT_TOOLCHAIN_TYPE)],
         ),
         APPLE_MAC_EXEC_GROUP: exec_group(
-            exec_compatible_with = ["@platforms//os:macos"],
-            toolchains = [config_common.toolchain_type(APPLE_MAC_TOOLCHAIN_TYPE)],
+            # Was exec_compatible_with = ["@platforms//os:macos"]. Requiring
+            # rules_applecross's bundling toolchain type instead sends the Mac
+            # tool actions wherever the bundling rules themselves run: a macOS
+            # host, or a Linux executor with the ported Apple tools staged.
+            toolchains = [
+                config_common.toolchain_type(APPLE_MAC_TOOLCHAIN_TYPE),
+                config_common.toolchain_type(_APPLE_BUNDLING_TOOLCHAIN_TYPE),
+            ],
         ),
     }
 

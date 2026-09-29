@@ -350,4 +350,5 @@ This rule encapsulates a target which is provided to dependers as a bundle. An
 level Apple bundle dependent. `apple_precompiled_resource_bundle` targets need to be added to
 library targets through the `data` attribute.
 """,
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

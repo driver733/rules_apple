@@ -115,4 +115,5 @@ structure. For example with a directory structure of
 and a target named `dtrace_gen` the header path would be
 `<GENFILES>/dtrace_gen/foo/bar.h`.
 """,
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

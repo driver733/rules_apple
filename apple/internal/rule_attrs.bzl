@@ -68,6 +68,10 @@ def _common_attrs():
     """Private attributes on all rules; these should be included in all rule attributes."""
     return dicts.add(
         {
+            "_sdk_tool_files": attr.label(
+                default = Label("//apple:sdk_tool_files"),
+                allow_files = True,
+            ),
         },
         apple_support.action_required_attrs(),
     )

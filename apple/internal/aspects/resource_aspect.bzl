@@ -440,6 +440,10 @@ apple_resource_aspect = aspect(
     ),
     exec_groups = apple_toolchain_utils.use_apple_exec_group_toolchain(),
     fragments = ["apple"],
+    # Resource actions (actool, ibtool, plists, strings) are registered by this
+    # aspect against library targets, so it needs the same execution platform
+    # requirement as the bundling rules that consume its output.
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
     doc = """Aspect that collects and propagates resource information to be bundled by a top-level
 bundling rule.""",
 )

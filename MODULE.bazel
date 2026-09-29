@@ -10,6 +10,10 @@ module(
 bazel_dep(name = "apple_support", version = "2.8.3")
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
 bazel_dep(name = "platforms", version = "1.0.0")
+# Declared so the execution platform patch can name the toolchain type that
+# decides where Apple product actions run. rules_applecross is the module
+# applying that patch, so this resolves back to it.
+bazel_dep(name = "rules_applecross", version = "0.0.3")
 bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(
     name = "rules_swift",

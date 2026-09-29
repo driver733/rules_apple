@@ -163,4 +163,5 @@ This rule takes one or more Core Data model definitions from .xcdatamodeld
 bundles and generates Swift or Objective-C source files that can be added
 as srcs of a swift_library target.
 """,
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

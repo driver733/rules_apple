@@ -869,6 +869,7 @@ reproducible error case.".format(
         archs_for_lipo = sets.to_list(requested_archs),
         platform_prerequisites = platform_prerequisites,
         rule_label = label,
+        sdk_tool_files = ctx.files._sdk_tool_files,
         xcode_stub_path = rule_descriptor.stub_binary_path,
     )
 

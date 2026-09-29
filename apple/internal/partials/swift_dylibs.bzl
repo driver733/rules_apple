@@ -111,6 +111,12 @@ def _swift_dylib_action(
         arguments = [swift_stdlib_tool_args],
         env = shared_environment.default_env,
         exec_group = mac_exec_group,
+        # The Linux cross toolchain's SDK tools are discovered through PATH.
+        # Run locally outside the sandbox so xcrun can reach them.
+        execution_requirements = {
+            "no-remote": "1",
+            "no-sandbox": "1",
+        },
         executable = swift_stdlib_tool,
         inputs = binary_files,
         mnemonic = "SwiftStdlibCopy",

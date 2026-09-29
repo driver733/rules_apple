@@ -247,4 +247,5 @@ ios_application(
         ios_extension = _IOS_PROFILE_EXTENSION,
         macos_extension = _MACOS_PROFILE_EXTENSION,
     ),
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

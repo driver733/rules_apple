@@ -271,4 +271,5 @@ Provides:
   AppleBundleVersionInfo: Contains a reference to the JSON file that holds the
       version information for a bundle.
 """,
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

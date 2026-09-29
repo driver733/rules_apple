@@ -19,8 +19,8 @@ load(
     "apple_support",
 )
 load(
-    "@apple_support//lib:lipo.bzl",
-    "lipo",
+    "@bazel_skylib//lib:shell.bzl",
+    "shell",
 )
 load(
     "//apple/internal:intermediates.bzl",
@@ -38,6 +38,7 @@ def _create_stub_binary(
         output_discriminator = None,
         platform_prerequisites,
         rule_label,
+        sdk_tool_files = [],
         xcode_stub_path):
     """Returns a symlinked stub binary from the Xcode distribution.
 
@@ -64,13 +65,24 @@ def _create_stub_binary(
     )
 
     if archs_for_lipo:
-        lipo.extract_or_thin(
+        if len(archs_for_lipo) == 1:
+            lipo_args = "-thin " + archs_for_lipo[0]
+        else:
+            lipo_args = " ".join(["-extract " + a for a in archs_for_lipo])
+        apple_support.run_shell(
             actions = actions,
-            input_shell_expression = "\"$SDKROOT/{xcode_stub_path}\"".format(
-                xcode_stub_path = xcode_stub_path,
+            command = (
+                "SDKROOT=\"$DEVELOPER_DIR/Platforms/$APPLE_SDK_PLATFORM.platform/Developer/SDKs/$APPLE_SDK_PLATFORM.sdk\" && " +
+                "mkdir -p {dir} && \"$DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo\" \"$SDKROOT/{stub}\" {args} -output {out}"
+            ).format(
+                dir = shell.quote(binary_artifact.dirname),
+                stub = xcode_stub_path,
+                args = lipo_args,
+                out = shell.quote(binary_artifact.path),
             ),
-            archs = archs_for_lipo,
-            output = binary_artifact,
+            execution_requirements = {"no-sandbox": "1"},
+            mnemonic = "AppleLipoExtract",
+            outputs = [binary_artifact],
             apple_fragment = platform_prerequisites.apple_fragment,
             xcode_config = platform_prerequisites.xcode_version_config,
         )

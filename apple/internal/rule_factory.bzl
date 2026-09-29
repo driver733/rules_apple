@@ -41,6 +41,17 @@ load(
     "coverage_files_aspect",
 )
 
+# Requiring this toolchain type is what keeps bundling actions -- the final
+# link, resource compilation, plists, signing and tests -- on an execution
+# platform that can run real Xcode tools. It replaces the hardcoded
+# exec_compatible_with = ["@platforms//os:macos"] removed below, which could not
+# distinguish a Linux executor with the ported Apple tools staged on it from one
+# without, nor a macOS executor from the machine running the build.
+# Named through rules_applecross's apparent name, which this fork declares a
+# bazel_dep on, so the label resolves from here whether that module is the one
+# being built or a dependency of it.
+_APPLE_BUNDLING_TOOLCHAIN_TYPE = "@rules_applecross//toolchain:apple_bundling_toolchain_type"
+
 # Returns the common set of rule attributes to support Apple test rules.
 # TODO(b/246990309): Move _COMMON_TEST_ATTRS to rule attrs in a follow up CL.
 _COMMON_TEST_ATTRS = {
@@ -143,13 +154,10 @@ def _create_apple_rule(
         attrs = dicts.add(*attrs),
         cfg = cfg,
         doc = doc,
-        exec_compatible_with = [
-            "@platforms//os:macos",
-        ],
         executable = is_executable,
         exec_groups = apple_toolchain_utils.use_apple_exec_group_toolchain(),
         fragments = ["apple", "cpp", "objc"],
-        toolchains = toolchains,
+        toolchains = toolchains + [_APPLE_BUNDLING_TOOLCHAIN_TYPE],
         **extra_args
     )
 
@@ -181,8 +189,13 @@ def _create_apple_test_rule(*, doc, implementation, platform_type):
         exec_groups = dicts.add(
             {
                 "test": exec_group(
-                    exec_compatible_with = [
-                        "@platforms//os:macos",
+                    toolchains = [
+                        _APPLE_BUNDLING_TOOLCHAIN_TYPE,
+                        # Re-declared so Bazel's own test toolchain keeps applying
+                        # the target platform constraints. Without it the group
+                        # resolves to whichever platform comes first and an Apple
+                        # test is shipped to a Linux executor.
+                        "@bazel_tools//tools/test:default_test_toolchain_type",
                     ],
                 ),
             },

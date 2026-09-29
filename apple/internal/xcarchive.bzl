@@ -115,4 +115,5 @@ xcarchive(
 )
 ````
     """,
+    toolchains = ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

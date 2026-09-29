@@ -314,3 +314,16 @@ apple_resource_hint(
     name = "suppress_resources",
     action = apple_resource_hint_action.suppress,
 )
+
+# Extra SDK/toolchain files needed by rules_apple actions (environment_plist,
+# plisttool, etc.) in sandboxed or remote execution.  Consumers set this via:
+#   build --@build_bazel_rules_apple//apple:sdk_tool_files=@apple_cross_toolchain//:sdk_tool_files
+label_flag(
+    name = "sdk_tool_files",
+    build_setting_default = ":_empty_sdk_tool_files",
+)
+
+filegroup(
+    name = "_empty_sdk_tool_files",
+    srcs = [],
+)

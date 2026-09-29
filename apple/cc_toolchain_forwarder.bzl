@@ -48,5 +48,9 @@ for the purposes of understanding what constraints the results of each Apple spl
 resolve to from the perspective of any bundling and binary rules that generate "fat" Apple binaries.
 """,
     # Anticipated "new" toolchain assignment.
-    toolchains = use_cc_toolchain(),
+    # The C++ toolchain this forwards is the one the bundling rules link with,
+    # so it has to resolve on the same execution platform they do. Without the
+    # product toolchain type it resolves independently and a build that compiles
+    # on a Linux executor would link with that executor's toolchain.
+    toolchains = use_cc_toolchain() + ["@rules_applecross//toolchain:apple_bundling_toolchain_type"],
 )

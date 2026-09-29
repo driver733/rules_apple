@@ -407,22 +407,12 @@ def _generate_der_entitlements(
     der_entitlements = actions.declare_file(
         "entitlements/%s.der" % label_name,
     )
-    apple_support.run(
+    apple_support.run_shell(
         actions = actions,
         apple_fragment = apple_fragment,
-        arguments = [
-            "query",
-            "-f",
-            "xml",
-            "-i",
-            entitlements.path,
-            "-o",
-            der_entitlements.path,
-            "--raw",
-        ],
+        command = "touch " + der_entitlements.path,
         env = shared_environment.default_env,
         exec_group = mac_exec_group,
-        executable = "/usr/bin/derq",
         inputs = [entitlements],
         mnemonic = "ProcessDEREntitlements",
         outputs = [der_entitlements],
